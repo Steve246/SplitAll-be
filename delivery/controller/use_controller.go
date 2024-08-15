@@ -33,7 +33,7 @@ func (u *UserController) RecepientSend(c *gin.Context) {
 		return
 	}
 
-	detailMsg := ""
+	detailMsg := "Picture Successfully Receive"
 	u.Success(c, data, detailMsg, "")
 
 }
@@ -65,7 +65,7 @@ func (u *UserController) UploadImage(c *gin.Context) {
 		return
 	}
 
-	detailMsg := "Image Upload is Success"
+	detailMsg := 200
 	u.Success(c, imageUrl, detailMsg, "")
 }
 

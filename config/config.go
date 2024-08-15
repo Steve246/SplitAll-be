@@ -15,9 +15,15 @@ func (c *Config) readConfig() {
 		return
 	}
 
+	// OCR Config
+
+	ocrKeys := os.Getenv("OCR_API_KEYS")
+	ocrUrl := os.Getenv("OCR_API_URL")
+	c.OcrConfig = OcrConfig{ApiKeys: ocrKeys, ApiUrl: ocrUrl}
+
 	// API Config start here
-	api := os.Getenv("API_URL")
-	c.ApiConfig = ApiConfig{Url: api}
+	// api := os.Getenv("API_URL")
+	// c.ApiConfig = ApiConfig{Url: api}
 
 	// DB Config start here
 	dbHost := os.Getenv("DB_HOST")

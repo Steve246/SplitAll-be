@@ -10,15 +10,21 @@ import (
 )
 
 type Infra interface {
+	OcrConfig() config.OcrConfig
 	TokenConfig() config.TokenConfig
 
 	SqlDb() *gorm.DB
 }
 
 type infra struct {
+	ocrConfig   config.OcrConfig
 	tokenConfig config.TokenConfig
 
 	dbResource *gorm.DB
+}
+
+func (i *infra) OcrConfig() config.OcrConfig {
+	return i.ocrConfig
 }
 
 func (i *infra) TokenConfig() config.TokenConfig {
@@ -37,7 +43,11 @@ func NewInfra(config config.Config) Infra {
 	}
 	log.Print("Database Connected!")
 
-	return &infra{dbResource: resource, tokenConfig: config.TokenConfig} // tokenConfig: config.TokenConfig
+	return &infra{
+		ocrConfig:   config.OcrConfig,
+		dbResource:  resource,
+		tokenConfig: config.TokenConfig,
+	} // tokenConfig: config.TokenConfig
 
 }
 

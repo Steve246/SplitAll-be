@@ -3,6 +3,10 @@ package config
 import "github.com/golang-jwt/jwt"
 
 type (
+	OcrConfig struct {
+		ApiKeys string
+		ApiUrl  string
+	}
 	ApiConfig struct {
 		Url string
 	}
@@ -44,5 +48,6 @@ type (
 		TokenConfig
 		MailConfig
 		NotifConfig
+		OcrConfig
 	}
 )
