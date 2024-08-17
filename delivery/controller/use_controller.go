@@ -17,6 +17,38 @@ type UserController struct {
 	api.BaseApi
 }
 
+func (u *UserController) GetOcrData(c *gin.Context) {
+	// Retrieve the file
+	file, err := c.FormFile("file")
+	if err != nil {
+		u.Failed(c, utils.UploadImageError())
+		return
+	}
+
+	// Check file size
+	if file.Size < 10*1024 || file.Size > 2*1024*1024 {
+		u.Failed(c, utils.UploadImageFileLimitation())
+		return
+	}
+
+	// Check file format
+	ext := filepath.Ext(file.Filename)
+	if ext != ".jpg" && ext != ".jpeg" {
+		u.Failed(c, utils.UploadImageTypeError())
+		return
+	}
+
+	imageInfo, err := u.ucUser.GetOcrInfo(file)
+	if err != nil {
+		u.Failed(c, utils.UploadImageError())
+		return
+	}
+
+	detailMsg := 200
+	u.Success(c, imageInfo, detailMsg, "")
+
+}
+
 func (u *UserController) RecepientSend(c *gin.Context) {
 
 	var bodyRequest []model.UserRecepient
@@ -76,6 +108,8 @@ func NewUserController(router *gin.RouterGroup, routerDev *gin.RouterGroup, ucUs
 		ucUser:    ucUser,
 		BaseApi:   api.BaseApi{},
 	}
+
+	router.POST("/image_ocr", controller.GetOcrData)
 
 	router.POST("/image", controller.UploadImage)
 

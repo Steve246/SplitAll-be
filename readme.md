@@ -1,0 +1,1 @@
+OCR Engine used --> https://github.com/bhimrazy/receipt-ocr

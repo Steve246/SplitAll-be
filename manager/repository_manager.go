@@ -3,12 +3,17 @@ package manager
 import "SplitAll/repository"
 
 type RepositoryManager interface {
+	OcrRepo() repository.OcrReaderRepository
 	ImageUploadRepo() repository.ImageUploadRepository
 	RecepientRepo() repository.RecepientRepository
 }
 
 type repositoryManager struct {
 	infra Infra
+}
+
+func (r *repositoryManager) OcrRepo() repository.OcrReaderRepository {
+	return repository.NewOcrReaderRepository(r.infra.SqlDb(), r.infra.OcrConfig())
 }
 
 func (r *repositoryManager) RecepientRepo() repository.RecepientRepository {

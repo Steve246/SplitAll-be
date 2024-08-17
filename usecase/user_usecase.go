@@ -5,17 +5,54 @@ import (
 	"SplitAll/model/dto"
 	"SplitAll/repository"
 	"SplitAll/utils"
+	"fmt"
+	"io/ioutil"
 	"mime/multipart"
 )
 
 type UserUsecase interface {
+	GetOcrInfo(file *multipart.FileHeader) (string, error)
 	UserSendRecepeint(images []model.UserRecepient) ([]dto.RecepientResponse, error)
 	SaveImageURL(file *multipart.FileHeader) (string, error)
 }
 
 type userUsecase struct {
+	ocrRepo       repository.OcrReaderRepository
 	imageRepo     repository.ImageUploadRepository
 	recepientRepo repository.RecepientRepository
+}
+
+func (u *userUsecase) GetOcrInfo(file *multipart.FileHeader) (string, error) {
+	// Open the file
+	src, err := file.Open()
+	if err != nil {
+		return "", fmt.Errorf("failed to open file: %w", err)
+	}
+	defer src.Close()
+
+	// Read the file content into a byte slice
+	imageData, err := ioutil.ReadAll(src)
+	if err != nil {
+		return "", fmt.Errorf("failed to read file content: %w", err)
+	}
+
+	// Determine the content type
+	contentType := file.Header.Get("Content-Type")
+
+	// Call the PostOcrData function
+	ocrResult, err := u.ocrRepo.PostOcrData(imageData, contentType)
+	if err != nil {
+		return "", fmt.Errorf("failed to post OCR data: %w", err)
+	}
+
+	// Save the image URL or handle the OCR result as needed
+	// imageUrlNew, err := u.imageRepo.Create(file)
+	// if err != nil {
+	// 	return "", utils.ImageTypeError()
+	// }
+
+	// Return the image URL and/or OCR result
+	return ocrResult, nil
 }
 
 func (u *userUsecase) SaveImageURL(file *multipart.FileHeader) (string, error) {

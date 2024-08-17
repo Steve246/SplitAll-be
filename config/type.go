@@ -4,8 +4,9 @@ import "github.com/golang-jwt/jwt"
 
 type (
 	OcrConfig struct {
-		ApiKeys string
-		ApiUrl  string
+		ApiKeys     string
+		ApiUrl      string
+		ApiEndpoint string
 	}
 	ApiConfig struct {
 		Url string
