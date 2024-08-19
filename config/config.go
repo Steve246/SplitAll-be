@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -22,8 +23,8 @@ func (c *Config) readConfig() {
 	c.OcrConfig = OcrConfig{ApiKeys: ocrKeys, ApiUrl: ocrUrl}
 
 	// API Config start here
-	// api := os.Getenv("API_URL")
-	// c.ApiConfig = ApiConfig{Url: api}
+	api := os.Getenv("API_URL")
+	c.ApiConfig = ApiConfig{Url: api}
 
 	// DB Config start here
 	dbHost := os.Getenv("DB_HOST")
@@ -46,5 +47,6 @@ func NewConfig() Config {
 func InitConfig() Config {
 	cfg := Config{}
 	cfg.readConfig()
+	log.Print("Config Connected!")
 	return cfg
 }

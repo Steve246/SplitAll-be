@@ -4,6 +4,7 @@ import (
 	"SplitAll/config"
 	"SplitAll/delivery/controller"
 	"SplitAll/manager"
+	"fmt"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -40,6 +41,8 @@ func Server() *appServer {
 		MaxAge:           12 * time.Hour,
 	}))
 
+	fmt.Println("ini host --> ", host)
+
 	return &appServer{
 		usecaseManager: usecaseManager,
 		engine:         router,
@@ -63,6 +66,7 @@ func (a *appServer) initControllers() {
 func (a *appServer) Run() {
 	a.initControllers()
 	err := a.engine.Run(a.host)
+
 	if err != nil {
 		panic(err)
 	}
