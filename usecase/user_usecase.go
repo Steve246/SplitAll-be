@@ -69,6 +69,8 @@ func (u *userUsecase) SaveImageURL(file *multipart.FileHeader) (string, error) {
 func (u *userUsecase) UserSendRecepeint(images []model.UserRecepient) ([]dto.RecepientResponse, error) {
 	resultConvertText, err := u.recepientRepo.ConvertText(images)
 
+	fmt.Println("ini hasil resultConvertText --> ", resultConvertText)
+
 	if err != nil {
 		return []dto.RecepientResponse{}, nil
 	}

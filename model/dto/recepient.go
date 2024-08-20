@@ -7,6 +7,12 @@ type RecepientResponse struct {
 	BankNumber   string
 }
 
+type RecepientAssign struct {
+	AssignPerson string
+	BankType     string
+	BankNumber   string
+}
+
 type RecepientDetail struct {
 	MenuName  string `json:"menuName"`
 	MenuPrice string `json:"menuPrice"`
