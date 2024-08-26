@@ -32,6 +32,7 @@ func (u *userUsecase) GetOcrInfo(file *multipart.FileHeader) (string, error) {
 
 	// Read the file content into a byte slice
 	imageData, err := ioutil.ReadAll(src)
+
 	if err != nil {
 		return "", fmt.Errorf("failed to read file content: %w", err)
 	}
@@ -39,10 +40,13 @@ func (u *userUsecase) GetOcrInfo(file *multipart.FileHeader) (string, error) {
 	// Determine the content type
 	contentType := file.Header.Get("Content-Type")
 
+	fmt.Println("sampe sini masih jalan --> ", imageData)
+
 	// Call the PostOcrData function
-	ocrResult, err := u.ocrRepo.PostOcrData(imageData, contentType)
-	if err != nil {
-		return "", fmt.Errorf("failed to post OCR data: %w", err)
+	ocrResult, errOcr := u.ocrRepo.PostOcrData(imageData, contentType)
+
+	if errOcr != nil {
+		return "", utils.ApiOcrError()
 	}
 
 	// Save the image URL or handle the OCR result as needed

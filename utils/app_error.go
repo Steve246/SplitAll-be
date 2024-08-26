@@ -15,6 +15,16 @@ func (e AppError) Error() string {
 	return fmt.Sprintf("type: %d, code: %s, err: %s", e.ErrorType, e.ErrorCode, e.ErrorMessage)
 }
 
+// api ocr error
+
+func ApiOcrError() error {
+	return AppError{
+		ErrorCode:    "400",
+		ErrorMessage: "API OCR Connection error",
+		ErrorType:    http.StatusBadRequest,
+	}
+}
+
 // recepient error
 
 func NoMenuProvidedError() error {

@@ -23,7 +23,6 @@ func (r *recepientRepository) ConvertText(images []model.UserRecepient) ([]dto.R
 	bankInfo := make(map[string]dto.RecepientResponse) // To store BankType and BankNumber for each assignee
 
 	for _, img := range images {
-		fmt.Println("ini img -->? ", img)
 		menu := dto.RecepientDetail{
 			MenuName:  img.MenuName,
 			MenuPrice: img.MenuPrice,
@@ -41,8 +40,6 @@ func (r *recepientRepository) ConvertText(images []model.UserRecepient) ([]dto.R
 		}
 	}
 
-	fmt.Println("ini masuk 2 -->", menuGroups)
-
 	// Create the final response
 	var result []dto.RecepientResponse
 	for assignee, menus := range menuGroups {
@@ -59,8 +56,6 @@ func (r *recepientRepository) ConvertText(images []model.UserRecepient) ([]dto.R
 		}
 		result = append(result, resp)
 	}
-
-	fmt.Println("ini masuk 3 -->", result)
 
 	if len(result) == 0 {
 		return nil, utils.NoMenuProvidedError()

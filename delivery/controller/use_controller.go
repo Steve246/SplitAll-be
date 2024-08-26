@@ -73,6 +73,7 @@ func (u *UserController) RecepientSend(c *gin.Context) {
 func (u *UserController) UploadImage(c *gin.Context) {
 	// Retrieve the file
 	file, err := c.FormFile("file")
+
 	if err != nil {
 		u.Failed(c, utils.UploadImageError())
 		return
@@ -111,7 +112,7 @@ func NewUserController(router *gin.RouterGroup, routerDev *gin.RouterGroup, ucUs
 
 	router.POST("/image_ocr", controller.GetOcrData)
 
-	router.POST("/image", controller.UploadImage)
+	// router.POST("/image", controller.UploadImage)
 
 	router.POST("/convertDataToText", controller.RecepientSend)
 

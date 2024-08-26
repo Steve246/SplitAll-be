@@ -23,10 +23,14 @@ type ocrReaderRepository struct {
 func (repo *ocrReaderRepository) PostOcrData(imageData []byte, contentType string) (string, error) {
 	// Create the full URL
 
+	fmt.Println("ini masuk PostOCrData")
+
 	url := repo.ocrConfig.ApiUrl + repo.ocrConfig.ApiEndpoint
 
 	// Create a new POST request
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(imageData))
+
+	fmt.Println("ini error PostOCrData --> ", err)
 	if err != nil {
 		return "", fmt.Errorf("failed to create HTTP request: %w", err)
 	}
