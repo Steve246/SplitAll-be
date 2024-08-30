@@ -5,6 +5,7 @@ import (
 	"SplitAll/model"
 	"SplitAll/usecase"
 	"SplitAll/utils"
+	"fmt"
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
@@ -39,6 +40,8 @@ func (u *UserController) GetOcrData(c *gin.Context) {
 	}
 
 	imageInfo, err := u.ucUser.GetOcrInfo(file)
+
+	fmt.Println("ini error di use_controller --> ", err)
 	if err != nil {
 		u.Failed(c, utils.UploadImageError())
 		return

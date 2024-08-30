@@ -4,7 +4,6 @@ import (
 	"SplitAll/config"
 	"SplitAll/delivery/controller"
 	"SplitAll/manager"
-	"fmt"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -40,8 +39,6 @@ func Server() *appServer {
 		AllowCredentials: false,
 		MaxAge:           12 * time.Hour,
 	}))
-
-	fmt.Println("ini host --> ", host)
 
 	return &appServer{
 		usecaseManager: usecaseManager,

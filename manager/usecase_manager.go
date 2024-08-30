@@ -11,7 +11,7 @@ type usecaseManager struct {
 }
 
 func (u *usecaseManager) UserUsecase() usecase.UserUsecase {
-	return usecase.NewUserUsecase(u.repoManager.ImageUploadRepo(), u.repoManager.RecepientRepo())
+	return usecase.NewUserUsecase(u.repoManager.ImageUploadRepo(), u.repoManager.RecepientRepo(), u.repoManager.OcrRepo())
 }
 
 func NewUsecaseManager(repoManager RepositoryManager) UsecaseManager {

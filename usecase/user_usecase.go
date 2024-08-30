@@ -6,7 +6,7 @@ import (
 	"SplitAll/repository"
 	"SplitAll/utils"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"mime/multipart"
 )
 
@@ -22,7 +22,13 @@ type userUsecase struct {
 	recepientRepo repository.RecepientRepository
 }
 
-func (u *userUsecase) GetOcrInfo(file *multipart.FileHeader) (string, error) {
+func (u *userUsecase) GetOcrInfo(file *multipart.FileHeader) (result string, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			err = fmt.Errorf("function panicked: %v", r)
+		}
+	}()
+
 	// Open the file
 	src, err := file.Open()
 	if err != nil {
@@ -31,8 +37,7 @@ func (u *userUsecase) GetOcrInfo(file *multipart.FileHeader) (string, error) {
 	defer src.Close()
 
 	// Read the file content into a byte slice
-	imageData, err := ioutil.ReadAll(src)
-
+	imageData, err := io.ReadAll(src)
 	if err != nil {
 		return "", fmt.Errorf("failed to read file content: %w", err)
 	}
@@ -40,22 +45,12 @@ func (u *userUsecase) GetOcrInfo(file *multipart.FileHeader) (string, error) {
 	// Determine the content type
 	contentType := file.Header.Get("Content-Type")
 
-	fmt.Println("sampe sini masih jalan --> ", imageData)
-
 	// Call the PostOcrData function
-	ocrResult, errOcr := u.ocrRepo.PostOcrData(imageData, contentType)
-
-	if errOcr != nil {
-		return "", utils.ApiOcrError()
+	ocrResult, err := u.ocrRepo.PostOcrData(imageData, contentType)
+	if err != nil {
+		return "", fmt.Errorf("failed to post OCR data: %w", err)
 	}
 
-	// Save the image URL or handle the OCR result as needed
-	// imageUrlNew, err := u.imageRepo.Create(file)
-	// if err != nil {
-	// 	return "", utils.ImageTypeError()
-	// }
-
-	// Return the image URL and/or OCR result
 	return ocrResult, nil
 }
 
@@ -83,10 +78,11 @@ func (u *userUsecase) UserSendRecepeint(images []model.UserRecepient) ([]dto.Rec
 
 }
 
-func NewUserUsecase(imageRepo repository.ImageUploadRepository, recepientRepo repository.RecepientRepository) UserUsecase {
+func NewUserUsecase(imageRepo repository.ImageUploadRepository, recepientRepo repository.RecepientRepository, ocrRepo repository.OcrReaderRepository) UserUsecase {
 	usecase := new(userUsecase)
 	usecase.imageRepo = imageRepo
 	usecase.recepientRepo = recepientRepo
+	usecase.ocrRepo = ocrRepo
 
 	return usecase
 }

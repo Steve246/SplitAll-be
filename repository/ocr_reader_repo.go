@@ -4,7 +4,7 @@ import (
 	"SplitAll/config"
 	"bytes"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"gorm.io/gorm"
@@ -21,16 +21,10 @@ type ocrReaderRepository struct {
 }
 
 func (repo *ocrReaderRepository) PostOcrData(imageData []byte, contentType string) (string, error) {
-	// Create the full URL
-
-	fmt.Println("ini masuk PostOCrData")
-
 	url := repo.ocrConfig.ApiUrl + repo.ocrConfig.ApiEndpoint
 
 	// Create a new POST request
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(imageData))
-
-	fmt.Println("ini error PostOCrData --> ", err)
 	if err != nil {
 		return "", fmt.Errorf("failed to create HTTP request: %w", err)
 	}
@@ -48,7 +42,7 @@ func (repo *ocrReaderRepository) PostOcrData(imageData []byte, contentType strin
 	defer response.Body.Close()
 
 	// Read the response body
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		return "", fmt.Errorf("failed to read response body: %w", err)
 	}
