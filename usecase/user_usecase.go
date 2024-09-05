@@ -28,23 +28,10 @@ func (u *userUsecase) GetOcrInfo(file *multipart.FileHeader) (result string, err
 		}
 	}()
 
-	// Open the file
-	// src, err := file.Open()
-	// if err != nil {
-	// 	return "", fmt.Errorf("failed to open file: %w", err)
-	// }
-	// defer src.Close()
-
-	// Read the file content into a byte slice
-	// imageData, err := io.ReadAll(src)
-	// if err != nil {
-	// 	return "", fmt.Errorf("failed to read file content: %w", err)
-	// }
-
 	// Determine the content type
 	contentType := file.Header.Get("Content-Type")
 
-	// Call the PostOcrData function
+	// Call the repository method to handle the OCR request
 	ocrResult, err := u.ocrRepo.PostOcrData(file, contentType)
 	if err != nil {
 		return "", fmt.Errorf("failed to post OCR data: %w", err)

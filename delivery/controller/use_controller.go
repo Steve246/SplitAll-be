@@ -7,6 +7,7 @@ import (
 	"SplitAll/utils"
 	"fmt"
 	"path/filepath"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,30 +27,29 @@ func (u *UserController) GetOcrData(c *gin.Context) {
 		return
 	}
 
-	// Check file size
+	// Validate file size (between 10KB and 2MB)
 	if file.Size < 10*1024 || file.Size > 2*1024*1024 {
 		u.Failed(c, utils.UploadImageFileLimitation())
 		return
 	}
 
-	// Check file format
-	ext := filepath.Ext(file.Filename)
+	// Validate file format (only accept jpg/jpeg)
+	ext := strings.ToLower(filepath.Ext(file.Filename))
 	if ext != ".jpg" && ext != ".jpeg" {
 		u.Failed(c, utils.UploadImageTypeError())
 		return
 	}
 
+	// Call the usecase to handle the OCR process
 	imageInfo, err := u.ucUser.GetOcrInfo(file)
-
-	fmt.Println("ini error di use_controller --> ", err)
 	if err != nil {
+		fmt.Println("Error in use_controller --> ", err) // Useful for debugging
 		u.Failed(c, utils.UploadImageError())
 		return
 	}
 
-	detailMsg := 200
-	u.Success(c, imageInfo, detailMsg, "")
-
+	// Success response
+	u.Success(c, imageInfo, 200, "")
 }
 
 func (u *UserController) RecepientSend(c *gin.Context) {
